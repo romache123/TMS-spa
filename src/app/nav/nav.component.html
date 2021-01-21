@@ -1,11 +1,11 @@
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
   <div class="container">
-    <a class="navbar-brand" href="#">Тендер CRM</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
-      aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" (click)="isCollapsed = !isCollapsed">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarCollapse">
+    <a class="navbar-brand" href="#">Тендер CRM</a>   
+    <div class="collapse navbar-collapse" id="navbarCollapse" [collapse]="isCollapsed">
       <ul class="navbar-nav me-auto mb-2 mb-md-0">
         <li class="nav-item active">
           <a class="nav-link" aria-current="page" href="#">Поиск процедур</a>
@@ -13,18 +13,22 @@
         <li class="nav-item">
           <a class="nav-link" href="#">Шаблоны поиска</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Анализ конкурентов</a>
-        </li>
       </ul>
-      <form #loginForm="ngForm" *ngIf="!loggedIn" class="d-flex" (ngSubmit)="login()" autocomplete="off">
+      <div  class="dropdown" *ngIf="accountService.currentUser$ | async" dropdown>
+        <a class="dropdown-toggle text-light" dropdownToggle>Привет</a>
+        <div class="dropdown-menu mt-3" *dropdownMenu>
+          <div class="dropdown-item">Профиль</div>
+          <div class="dropdown-divider"></div>
+          <div class="dropdown-item" (click)="logout()">Выход</div>
+        </div>
+      </div>
+      <form #loginForm="ngForm" *ngIf="(accountService.currentUser$ | async) === null" class="d-flex" (ngSubmit)="login()" autocomplete="off">
         <input name="username" [(ngModel)]="model.username" class="form-control me-2" type="text" placeholder="Логин"
           aria-label="Логин">
         <input name="password" [(ngModel)]="model.password" class="form-control me-2" type="password"
           placeholder="Пароль" aria-label="Пароль">
         <button class="btn btn-outline-success" type="submit">Войти</button>
       </form>
-      <button *ngIf="loggedIn" class="btn btn-outline-success" (click)="logout()">Выход</button>
     </div>
   </div>
 </nav>
